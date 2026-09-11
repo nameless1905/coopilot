@@ -1,0 +1,26 @@
+services:
+  test-db:
+    image: postgres:16
+    container_name: test-db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin_pass
+      - POSTGRES_DB=testdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - test_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d testdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ai-stack        # ← вот эта секция подключает контейнер к общей сети
+
+volumes:
+  test_db_data:
+
+networks:
+  ai-stack:
+    external: true      # ← а это говорит "не создавай новую, используй существующую"

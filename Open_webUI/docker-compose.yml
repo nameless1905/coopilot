@@ -1,0 +1,22 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    environment:
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - ENABLE_SIGNUP=false
+    volumes:
+      - open-webui-data:/app/backend/data
+       - ./rag_documents:/app/rag_documents 
+    restart: always
+    networks:
+      - ai-stack
+
+volumes: 
+  open-webui-data:
+
+networks:
+  ai-stack:
+    external: true
